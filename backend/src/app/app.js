@@ -16,21 +16,25 @@ app.use('/api', api);
 
 // handle 404
 app.use((req, res, next) => {
-  const error = { status: 404, message: 'Not found!' };
-  next(error);
+  return res.status(404).json({
+    errors: [{
+      code: 'NOT_FOUND',
+      message: 'Api not found!'
+    }]
+  })
 })
 
 // handle error
 app.use((err, req, res, next) => {
-  if (err) {
-    const { status, error, data } = err;
-    const statusCode = status || 500;
-    return res.status(status).json({
-      status: statusCode,
-      error,
-      data
-    })
+  let statusCode = 500;
+  if (err && err.status) {
+    statusCode = err.status || 500;
   }
+  return res.status(statusCode).json({
+    url: req.originalUrl,
+    status: statusCode,
+    errors: err
+  })
 })
 
 module.exports = app;
