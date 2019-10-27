@@ -1,29 +1,33 @@
-const express = require('express');
+const express = require("express");
 const app = express();
+const cors = require("cors");
 
 // config
-require('./configs/config')(app);
-require('./configs/mongoose');
-require('./configs/passport');
+app.use(cors());
+require("./configs/config")(app);
+require("./configs/mongoose");
+require("./configs/passport");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-const api = require('./apis');
-app.get('/', (req, res, next) => {
-  res.end('home')
-})
-app.use('/api', api);
+const api = require("./apis");
+app.get("/", (req, res, next) => {
+  res.end("home");
+});
+app.use("/api", api);
 
 // handle 404
 app.use((req, res, next) => {
   return res.status(404).json({
-    errors: [{
-      code: 'NOT_FOUND',
-      message: 'Api not found!'
-    }]
-  })
-})
+    errors: [
+      {
+        code: "NOT_FOUND",
+        message: "Api not found!"
+      }
+    ]
+  });
+});
 
 // handle error
 app.use((err, req, res, next) => {
@@ -35,7 +39,7 @@ app.use((err, req, res, next) => {
     url: req.originalUrl,
     status: statusCode,
     errors: err
-  })
-})
+  });
+});
 
 module.exports = app;

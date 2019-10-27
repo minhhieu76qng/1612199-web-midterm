@@ -1,0 +1,12 @@
+.wrapped_form {
+  // background-color: #34495e;
+  background-color: #1abc9c;
+  position: relative;
+  .form_card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+  }
+
+  .alert_form {
+    margin-bottom: 20px;
+  }
+}

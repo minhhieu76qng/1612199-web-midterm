@@ -1,22 +1,168 @@
+@import url('https://fonts.googleapis.com/css?family=Permanent+Marker&display=swap');
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap');
+
+@import '~antd/dist/antd.css';
+
 .App {
-  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
 }
 
-.App-logo {
-  height: 40vmin;
+.game-wrapper {
+  position: relative;
+  background-color: #34495e;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.game-wrapper .game-info {
+  font-size: 20px;
+}
+
+.game-info .player {
+  font-size: 1em;
+  font-family: 'Permanent Marker', cursive;
+}
+
+.game-info .info > p {
+  margin: 0 0 7px;
+}
+
+#board {
+  position: relative;
+  display: inline-block;
+}
+
+#board .draw-lines {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  left: 0;
+  height: 100%;
+  pointer-events: none;
+}
+
+.board-row {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  font-size: 30px;
 }
 
-.App-link {
-  color: #09d3ac;
+.board-cell {
+  width: 1em;
+  height: 1em;
+  text-align: center;
+  line-height: 1em;
+  font-size: 1em;
+  font-weight: 900;
+  font-family: 'Permanent Marker', cursive;
+  padding: 0;
+  background-color: #fff;
+  transition: background-color 0.3s ease;
+  border: 1px solid #000;
+}
+
+button.board-cell {
+  outline: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.player.X {
+  color: rgb(255, 0, 0);
+}
+.player.O {
+  color: rgb(0, 0, 255);
+}
+
+.player.XO {
+  color: rgb(0, 255, 0);
+}
+
+.board-cell.not-clickable,
+.board-cell.not-clickable {
+  cursor: not-allowed;
+}
+
+.board-cell.winning-cell {
+  background-color: #ced6e0;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+/* history */
+
+.history-block {
+}
+
+.history-block .history-title {
+  font-size: 20px !important;
+  margin: 0;
+}
+
+.history-block .box-title {
+  display: flex;
+  justify-content: space-between;
+}
+.history-block .history-items {
+  margin-top: 10px;
+  max-height: 400px;
+  overflow: auto;
+}
+
+@media screen and (max-width: 991px) {
+  .game-wrapper {
+    padding: 10px 0;
+    text-align: center;
+  }
+
+  #board {
+    display: inline-block;
+    margin-top: 10px;
+  }
+  .App {
+    display: block;
+  }
+  .board-row {
+    font-size: 28px;
+  }
+  .game-wrapper .game-info {
+    position: static !important;
+    transform: translateX(0);
+    left: auto;
+    font-size: 14px;
+    /* width: 100%; */
+    margin: 0 auto !important;
+  }
+  .history-block {
+    position: static !important;
+    transform: translateX(0);
+    right: auto;
+    font-size: 14px;
+    /* width: 100%; */
+    margin: 10px auto 0 !important;
+  }
+  .history-block .history-title {
+    font-size: 16px !important;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .board-row {
+    font-size: 20px;
+  }
+}
+
+.line {
+  stroke-width: 4px;
+}
+
+.line.X {
+  stroke: rgb(255, 0, 0);
+}
+.line.O {
+  stroke: rgb(0, 0, 255);
+}
+.game-card + .game-card {
+  margin-top: 20px;
 }
