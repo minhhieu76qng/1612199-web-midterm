@@ -1,4 +1,6 @@
 const express = require('express');
+const passport = require('passport');
+const jwt = require('jsonwebtoken');
 const { createNewUser, getUserById, updateInfoUserById, changePassword } = require('@services/user/user.service');
 
 const router = express.Router();
@@ -46,6 +48,7 @@ router.patch('/:id', async (req, res, next) => {
   }
 })
 
+// thay doi password
 router.patch('/:id/password', async (req, res, next) => {
   const id = req.params.id;
 
@@ -60,4 +63,49 @@ router.patch('/:id/password', async (req, res, next) => {
     return next(err);
   }
 })
+
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', { session: false }, (err, user, info) => {
+    if (err) {
+      return res.status(500).json({
+        errors: [{
+          code: 'ERROR',
+          message: 'Error! An error occurred. Please try again later!'
+        }]
+      })
+    }
+
+    if (!user) {
+      return res.status(400).json({
+        errors: [{
+          code: 'INCORRECT',
+          message: info.message
+        }]
+      })
+    }
+
+    req.login(user, { session: false }, error => {
+      if (error) {
+        return res.status(400).json(error);
+      }
+
+      const { JWT_SECRET_KEY } = process.env;
+      // generate token
+      const token = jwt.sign({ id: user._id, email: user._id }, JWT_SECRET_KEY, { expiresIn: '1d' });
+
+      return res.status(200).json({
+        status: 200,
+        success: {
+          message: 'Loged in successfully!'
+        },
+        user: {
+          id: user._id,
+          email: user.email
+        },
+        token
+      })
+    })
+  })(req, res, next);
+})
+
 module.exports = router;

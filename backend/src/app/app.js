@@ -1,14 +1,15 @@
 const express = require('express');
 const app = express();
-const api = require('./apis');
 
 // config
 require('./configs/config')(app);
 require('./configs/mongoose');
+require('./configs/passport');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+const api = require('./apis');
 app.get('/', (req, res, next) => {
   res.end('home')
 })

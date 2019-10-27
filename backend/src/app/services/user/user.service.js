@@ -316,5 +316,6 @@ module.exports = {
   isValidEmail,
   getUserById,
   updateInfoUserById,
-  changePassword
+  changePassword,
+  comparePassword
 }
