@@ -11,7 +11,12 @@ const NavBar = ({ user, logOut }) => {
     logOut();
   };
   return (
-    <Menu theme='dark' mode='horizontal' defaultSelectedKeys='home'>
+    <Menu
+      theme='dark'
+      mode='horizontal'
+      defaultSelectedKeys='home'
+      style={{ lineHeight: '64px' }}
+    >
       <Menu.Item key='home'>
         <Link to='/'>
           <Icon type='home' />
@@ -51,34 +56,6 @@ const NavBar = ({ user, logOut }) => {
             Logout
           </Button>
         </Menu.Item>
-      )}
-      {user && (
-        <Menu.SubMenu
-          className='float-right'
-          key='sub-menu'
-          title={
-            <Link className='submenu-title-wrapper' to='/account'>
-              <Icon type='setting' />
-              Account Settings
-            </Link>
-          }
-        >
-          <Menu.Item>
-            <Link to='/account/edit/profiles'>
-              <Icon type='profile' /> Update profiles
-            </Link>
-          </Menu.Item>
-          <Menu.Item>
-            <Link to='/account/edit/password'>
-              <Icon type='key' /> Change password
-            </Link>
-          </Menu.Item>
-          <Menu.Item>
-            <Link to='/account/edit/avatar'>
-              <Icon type='picture' /> Upload avatar
-            </Link>
-          </Menu.Item>
-        </Menu.SubMenu>
       )}
     </Menu>
   );

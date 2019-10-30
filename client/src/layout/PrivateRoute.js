@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { Spin, Icon } from 'antd';
 import LocalStorage from '../utils/LocalStorage';
-import Layout from './Layout';
+import LayoutPage from './LayoutPage';
 
 const PrivateRoute = ({ user, getProfile, children, ...rest }) => {
   const token = LocalStorage.getToken() || null;
@@ -30,7 +30,7 @@ const PrivateRoute = ({ user, getProfile, children, ...rest }) => {
       />
     );
   }
-  return <Route {...rest} render={() => <Layout>{children}</Layout>} />;
+  return <Route {...rest} render={() => <LayoutPage>{children}</LayoutPage>} />;
 };
 
 export default PrivateRoute;
