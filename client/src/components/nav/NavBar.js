@@ -11,14 +11,15 @@ const NavBar = ({ user, logOut }) => {
     logOut();
   };
   return (
-    <Menu mode='horizontal'>
-      <Menu.Item>
+    <Menu theme='dark' mode='horizontal' defaultSelectedKeys='home'>
+      <Menu.Item key='home'>
         <Link to='/'>
           <Icon type='home' />
           Home
         </Link>
       </Menu.Item>
-      <Menu.Item>
+
+      <Menu.Item key='game'>
         <Link to='/game'>
           <Icon type='coffee' />
           Game
@@ -50,6 +51,34 @@ const NavBar = ({ user, logOut }) => {
             Logout
           </Button>
         </Menu.Item>
+      )}
+      {user && (
+        <Menu.SubMenu
+          className='float-right'
+          key='sub-menu'
+          title={
+            <Link className='submenu-title-wrapper' to='/account'>
+              <Icon type='setting' />
+              Account Settings
+            </Link>
+          }
+        >
+          <Menu.Item>
+            <Link to='/account/edit/profiles'>
+              <Icon type='profile' /> Update profiles
+            </Link>
+          </Menu.Item>
+          <Menu.Item>
+            <Link to='/account/edit/password'>
+              <Icon type='key' /> Change password
+            </Link>
+          </Menu.Item>
+          <Menu.Item>
+            <Link to='/account/edit/avatar'>
+              <Icon type='picture' /> Upload avatar
+            </Link>
+          </Menu.Item>
+        </Menu.SubMenu>
       )}
     </Menu>
   );

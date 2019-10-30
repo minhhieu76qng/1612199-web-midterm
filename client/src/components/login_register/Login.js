@@ -14,7 +14,16 @@ import {
 import { Link, Redirect } from 'react-router-dom';
 import './index.scss';
 
-const Login = ({ form, isFetching, login, errors, getProfile, user }) => {
+const Login = ({
+  form,
+  isFetching,
+  login,
+  errors,
+  getProfile,
+  user,
+  loginWithGg,
+  loginWithFb
+}) => {
   const { getFieldDecorator } = form;
 
   const handleSubmit = event => {
@@ -128,6 +137,39 @@ const Login = ({ form, isFetching, login, errors, getProfile, user }) => {
                   >
                     Log in
                   </Button>
+                  <div
+                    style={{
+                      marginTop: '20px',
+                      display: 'block'
+                    }}
+                  >
+                    Or login with
+                    <Row gutter={10}>
+                      <Col span={12}>
+                        <Button
+                          style={{ marginTop: '10px' }}
+                          block
+                          type='primary'
+                          size='large'
+                          onClick={loginWithFb}
+                        >
+                          Login with <Icon type='facebook' theme='filled' />
+                        </Button>
+                      </Col>
+                      <Col span={12}>
+                        <Button
+                          style={{ marginTop: '10px' }}
+                          block
+                          type='danger'
+                          size='large'
+                          onClick={loginWithGg}
+                        >
+                          Login with{' '}
+                          <Icon type='google-circle' theme='filled' />
+                        </Button>
+                      </Col>
+                    </Row>
+                  </div>
                   <div
                     style={{
                       marginTop: '20px',
