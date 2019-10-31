@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
-import jwt from 'jsonwebtoken';
 import { Card, Form, Input, Button, Select, Alert } from 'antd';
 import shortId from 'shortid';
-import LocalStorage from '../../utils/LocalStorage';
 import './index.scss';
 
 const UpdateInfo = ({ form, user, update, fetch, success, errors }) => {
@@ -24,11 +22,7 @@ const UpdateInfo = ({ form, user, update, fetch, success, errors }) => {
   };
 
   useEffect(() => {
-    // tach token -> lay id
-    const token = LocalStorage.getToken();
-    const { id } = jwt.decode(token);
-
-    fetch(id);
+    fetch();
   }, []);
 
   return (
