@@ -1,6 +1,5 @@
-import axios from 'axios';
-import jwt from 'jsonwebtoken';
 import LocalStorage from '../utils/LocalStorage';
+import authAxios from '../utils/authAxios';
 
 export const MARK = 'MARK';
 export const SET_TURN = 'SET_NEXT_TURN';
@@ -57,7 +56,7 @@ export function register(user) {
     dispatch(startRegister());
 
     // call api
-    return axios
+    return authAxios
       .post('/api/v1/users', user)
       .then(response => {
         dispatch(endRegister(response.data.attributes, response.data.success));
@@ -85,14 +84,12 @@ export function login(user) {
     dispatch(startLogin());
 
     // call api
-    return axios
+    return authAxios
       .post('/api/v1/users/login', user)
       .then(response => {
         const { token } = response.data;
         // set token to localstorage
         LocalStorage.setToken(token);
-        // stick token to request header
-        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 
         dispatch(endLogin(response.data.user, response.data.success));
       })
@@ -106,27 +103,20 @@ export function getProfile() {
   return dispatch => {
     dispatch(startLogin());
 
-    const token = LocalStorage.getToken();
-    const decoded = jwt.decode(token);
-    // get user id
-    if (token) {
-      return axios
-        .get(`/api/v1/users/${decoded.id}`, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-          }
-        })
-        .then(response => {
-          dispatch(endLogin(response.data.attributes, null));
-        })
-        .catch(() => {
-          dispatch(endLogin(null, null));
-        });
-    }
-    dispatch(endLogin(null, null));
+    const user = LocalStorage.getUser();
 
-    return {};
+    if (!user) {
+      return dispatch(endLogin(null, null));
+    }
+
+    return authAxios
+      .get(`/api/v1/users/${user.id}`)
+      .then(response => {
+        dispatch(endLogin(response.data.attributes, null));
+      })
+      .catch(() => {
+        dispatch(endLogin(null, null));
+      });
   };
 }
 

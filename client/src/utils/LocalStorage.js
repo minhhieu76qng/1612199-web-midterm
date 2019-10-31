@@ -1,12 +1,28 @@
+import jwt from 'jsonwebtoken';
+
 const getToken = () => {
   return localStorage.getItem('token');
 };
-const setToken = jwt => {
-  localStorage.setItem('token', jwt);
+const setToken = token => {
+  localStorage.setItem('token', token);
 };
 
 const removeToken = () => {
   localStorage.removeItem('token');
 };
 
-export default { getToken, setToken, removeToken };
+const getUser = () => {
+  const token = getToken();
+
+  if (!token) return null;
+
+  const user = jwt.decode(token);
+
+  if (!user || (user && !user.id)) {
+    return null;
+  }
+
+  return user;
+};
+
+export default { getUser, getToken, setToken, removeToken };

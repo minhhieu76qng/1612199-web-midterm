@@ -1,4 +1,4 @@
-import axios from 'axios';
+import authAxios from '../utils/authAxios';
 
 export const START_FETCH_USER = 'START_FETCH_USER';
 export const STOP_FETCH_USER = 'STOP_FETCH_USER';
@@ -20,7 +20,7 @@ export function updateUserInfo(user) {
   return dispatch => {
     dispatch(startFetch());
 
-    return axios
+    return authAxios
       .patch(`/api/v1/users/${user.id}`, user)
       .then(response => {
         dispatch(stopFetch(response.data.attributes, response.data.success));
@@ -35,7 +35,7 @@ export function fetchUser(id) {
   return dispatch => {
     dispatch(startFetch());
 
-    return axios
+    return authAxios
       .get(`/api/v1/users/${id}`)
       .then(response => {
         dispatch(stopFetch(response.data.attributes, response.data.success));

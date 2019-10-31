@@ -2,12 +2,12 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { Spin, Icon } from 'antd';
 import LocalStorage from '../utils/LocalStorage';
-import LayoutPage from './LayoutPage';
 
 const PrivateRoute = ({ user, getProfile, children, ...rest }) => {
-  const token = LocalStorage.getToken() || null;
+  // kiem tra token va user co hop le hay khong
+  const storeUser = LocalStorage.getUser();
 
-  if (!token && !user) {
+  if (!storeUser) {
     return (
       <Redirect
         to={{
@@ -17,7 +17,7 @@ const PrivateRoute = ({ user, getProfile, children, ...rest }) => {
     );
   }
 
-  if (token && !user) {
+  if (!user) {
     getProfile();
     const antIcon = <Icon type='loading' style={{ fontSize: 24 }} spin />;
 
@@ -30,7 +30,7 @@ const PrivateRoute = ({ user, getProfile, children, ...rest }) => {
       />
     );
   }
-  return <Route {...rest} render={() => <LayoutPage>{children}</LayoutPage>} />;
+  return <Route {...rest} render={() => children} />;
 };
 
 export default PrivateRoute;

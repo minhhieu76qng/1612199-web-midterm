@@ -7,6 +7,7 @@ import RegisterContainer from './containers/RegisterContainer';
 import LoginContainer from './containers/LoginContainer';
 import PrivateRouteContainer from './containers/PrivateRouteContainer';
 import AccountScene from './scenes/AccountScene';
+import LayoutPage from './layout/LayoutPage';
 
 function App() {
   return (
@@ -17,15 +18,22 @@ function App() {
           <Route path='/register' component={RegisterContainer} />
 
           <PrivateRouteContainer exact path='/game'>
-            <GameContainer />
+            <LayoutPage>
+              <GameContainer />
+            </LayoutPage>
           </PrivateRouteContainer>
 
           <PrivateRouteContainer exact path='/'>
-            <AccountScene />
+            <LayoutPage>
+              <AccountScene />
+            </LayoutPage>
           </PrivateRouteContainer>
           <PrivateRouteContainer path='/account'>
-            <AccountScene />
+            <LayoutPage>
+              <AccountScene />
+            </LayoutPage>
           </PrivateRouteContainer>
+
           <Route path='*'>
             <Result
               status='404'
