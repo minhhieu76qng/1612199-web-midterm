@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { push } from 'connected-react-router';
+import FormData from 'form-data';
 import axiosIns from '../utils/authAxios';
 import LocalStorage from '../utils/LocalStorage';
 
@@ -170,6 +171,52 @@ export function changePassword(user) {
   };
 }
 
-// export function uploadAvatar(user) {
-//   return { type: UPLOAD_AVATAR, user };
-// }
+export function uploadAvatar(file, onProgress, onSuccess, onError) {
+  return dispatch => {
+    dispatch(startFetch());
+
+    // tach token -> lay id
+    const token = LocalStorage.getToken();
+    const userInToken = jwt.decode(token);
+
+    if (!token || !userInToken || !userInToken.id) {
+      LocalStorage.removeToken();
+      dispatch(
+        fetchError([{ message: 'Not Authenticated! Redirecting to login...' }])
+      );
+      dispatch(clearNotifications());
+      dispatch(push('/login'));
+      return {};
+    }
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    return axiosIns
+      .createInstance()
+      .patch(`/api/v1/users/${userInToken.id}/avatar`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Accept: 'multipart/form-data'
+        },
+        onUploadProgress(progressEvent) {
+          onProgress(
+            {
+              percent: Math.round(
+                (progressEvent.loaded / progressEvent.total) * 100
+              )
+            },
+            file
+          );
+        }
+      })
+      .then(response => {
+        onSuccess(response.data.data, file);
+        dispatch(stopFetch(response.data.attributes, response.data.success));
+      })
+      .catch(err => {
+        onError();
+        dispatch(fetchError(err));
+      });
+  };
+}

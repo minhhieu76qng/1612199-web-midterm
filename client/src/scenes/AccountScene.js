@@ -5,6 +5,7 @@ import AccountView from '../components/account/AccountView';
 import AccountLayout from '../layout/AccountLayout';
 import UpdateInfoContainer from '../containers/UpdateInfoContainer';
 import ChangePasswordContainer from '../containers/ChangePasswordContainer';
+import UploadAvatarContainer from '../containers/UploadAvatarContainer';
 
 const AccountScene = () => {
   const { path } = useRouteMatch();
@@ -25,7 +26,7 @@ const AccountScene = () => {
             <ChangePasswordContainer />
           </Route>
           <Route exact path={`${path}/edit/avatar`}>
-            <AccountView />
+            <UploadAvatarContainer />
           </Route>
 
           <Route path='*'>

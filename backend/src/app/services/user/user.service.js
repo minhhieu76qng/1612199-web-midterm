@@ -343,6 +343,50 @@ const changePassword = async ({ id, currentPw, newPassword, retype }, next) => {
   }
 };
 
+const updateAvatarLocation = async ({ id, location }, next) => {
+  try {
+    const existUser = await User.findById(id);
+
+    if (!existUser) {
+      return {
+        status: 404,
+        errors: [
+          {
+            code: "NOT_FOUND",
+            message: "User is not exist!",
+            attributes: {
+              id
+            }
+          }
+        ]
+      };
+    }
+
+    const result = await User.findOneAndUpdate(
+      { _id: id },
+      { avatar: location },
+      { new: true }
+    );
+
+    return {
+      status: 200,
+      success: {
+        message: "Updated successfully!"
+      },
+      attributes: {
+        id: result._id,
+        email: result.email,
+        avatar: result.avatar,
+        name: result.name,
+        address: result.address,
+        sex: result.sex
+      }
+    };
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   hashPassword,
   createNewUser,
@@ -350,5 +394,6 @@ module.exports = {
   getUserById,
   updateInfoUserById,
   changePassword,
-  comparePassword
+  comparePassword,
+  updateAvatarLocation
 };

@@ -1,14 +1,44 @@
 const express = require("express");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
+const Aws = require("aws-sdk");
+const multer = require("multer");
+const multerS3 = require("multer-s3");
+
 const {
   createNewUser,
   getUserById,
   updateInfoUserById,
-  changePassword
+  changePassword,
+  updateAvatarLocation
 } = require("@services/user/user.service");
-
 const auth = require("@middlewares/auth");
+const { IAM_USER_KEY, IAM_USER_SECRET, BUCKET_NAME } = process.env;
+
+// MULTER
+const s3Bucket = new Aws.S3({
+  accessKeyId: IAM_USER_KEY,
+  secretAccessKey: IAM_USER_SECRET,
+  Bucket: BUCKET_NAME,
+  region: "ap-southeast-1"
+});
+var upload = multer({
+  storage: multerS3({
+    s3: s3Bucket,
+    bucket: `${BUCKET_NAME}`,
+    acl: "public-read",
+    metadata: function(req, file, cb) {
+      cb(null, { fieldName: file.fieldname });
+    },
+    key: function(req, file, cb) {
+      const name = file.originalname;
+      const ext = name.substring(name.lastIndexOf("."), name.length);
+      cb(null, `${Date.now().toString()}${ext}`);
+    }
+  })
+});
+
+const multerUploader = upload.single("image");
 
 const router = express.Router();
 
@@ -73,6 +103,34 @@ router.patch("/:id/password", auth, async (req, res, next) => {
   }
 });
 
+// upload photo
+router.patch("/:id/avatar", auth, (req, res, next) => {
+  const id = req.params.id;
+  multerUploader(req, res, async err => {
+    if (err) {
+      return res.status(500).json({
+        status: 500,
+        errors: [
+          {
+            code: "INTERNAL_ERROR",
+            message: "Cant up load now!"
+          }
+        ]
+      });
+    }
+
+    try {
+      // save to db
+      const location = req.file.location;
+      const result = await updateAvatarLocation({ id, location }, next);
+
+      return res.status(result.status).json(result);
+    } catch (err) {
+      return next(err);
+    }
+  });
+});
+
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", { session: false }, (err, user, info) => {
     if (err) {
@@ -117,7 +175,10 @@ router.post("/login", (req, res, next) => {
         },
         user: {
           id: user._id,
-          email: user.email
+          email: user.email,
+          address: user.address,
+          name: user.name,
+          sex: user.sex
         },
         token
       });
