@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
 import WrappedLogin from '../components/login_register/Login';
-import { login, getProfile } from '../actions';
+import { fetchUser, login } from '../actions/account';
 
 const mapStateToProps = state => {
   return {
-    isFetching: state.login.isFetching,
-    success: state.login.success,
-    errors: state.login.errors,
-    user: state.login.user
+    isFetching: state.account.isFetching,
+    success: state.account.success,
+    errors: state.account.errors,
+    user: state.account.user
   };
 };
 
@@ -16,8 +16,8 @@ const mapDispatchToProps = dispatch => {
     login: user => {
       dispatch(login(user));
     },
-    getProfile: () => {
-      dispatch(getProfile());
+    fetchUser: () => {
+      dispatch(fetchUser());
     }
   };
 };

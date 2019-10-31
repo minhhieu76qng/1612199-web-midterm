@@ -3,7 +3,7 @@ import { Route, Redirect } from 'react-router-dom';
 import { Spin, Icon } from 'antd';
 import LocalStorage from '../utils/LocalStorage';
 
-const PrivateRoute = ({ user, getProfile, children, ...rest }) => {
+const PrivateRoute = ({ user, fetchUser, children, ...rest }) => {
   // kiem tra token va user co hop le hay khong
   const storeUser = LocalStorage.getUser();
 
@@ -18,7 +18,7 @@ const PrivateRoute = ({ user, getProfile, children, ...rest }) => {
   }
 
   if (!user) {
-    getProfile();
+    fetchUser();
     const antIcon = <Icon type='loading' style={{ fontSize: 24 }} spin />;
 
     return (

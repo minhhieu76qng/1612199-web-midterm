@@ -19,7 +19,7 @@ const Login = ({
   isFetching,
   login,
   errors,
-  getProfile,
+  fetchUser,
   user,
   loginWithGg,
   loginWithFb
@@ -42,7 +42,7 @@ const Login = ({
 
   // component did mount
   useEffect(() => {
-    getProfile();
+    fetchUser();
   }, []);
 
   if (user) {

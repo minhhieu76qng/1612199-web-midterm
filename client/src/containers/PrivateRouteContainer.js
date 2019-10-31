@@ -1,17 +1,17 @@
 import { connect } from 'react-redux';
-import { getProfile } from '../actions/index';
+import { fetchUser } from '../actions/account';
 import PrivateRoute from '../layout/PrivateRoute';
 
 const mapStateToProps = state => {
   return {
-    user: state.login.user
+    user: state.account.user
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    getProfile: () => {
-      dispatch(getProfile());
+    fetchUser: () => {
+      dispatch(fetchUser());
     }
   };
 };

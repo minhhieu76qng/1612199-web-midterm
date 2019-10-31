@@ -1,10 +1,16 @@
 import jwt from 'jsonwebtoken';
-import authAxios from '../utils/authAxios';
+import { push } from 'connected-react-router';
+import axiosIns from '../utils/authAxios';
 import LocalStorage from '../utils/LocalStorage';
 
+export const START_LOGIN = 'START_LOGIN';
+export const END_LOGIN = 'END_LOGIN';
+export const LOGIN_ERROR = 'LOGIN_ERROR';
+export const LOGOUT = 'LOGOUT';
 export const START_FETCH_USER = 'START_FETCH_USER';
 export const STOP_FETCH_USER = 'STOP_FETCH_USER';
 export const FETCH_ERROR = 'FETCH_ERROR';
+export const CLEAR_NOTIFICATIONS = 'CLEAR_NOTIFICATIONS';
 
 export function startFetch() {
   return { type: START_FETCH_USER };
@@ -17,7 +23,51 @@ export function fetchError(errors) {
   return { type: FETCH_ERROR, errors };
 }
 
-// middleware
+export function startLogin() {
+  return { type: START_LOGIN };
+}
+
+export function endLogin(data, success) {
+  return { type: END_LOGIN, data, success };
+}
+
+export function loginError(errors) {
+  return { type: LOGIN_ERROR, errors };
+}
+
+export function clearNotifications() {
+  return { type: CLEAR_NOTIFICATIONS };
+}
+
+// //////////////////////////////////////////////////////////////////////////
+//                              MIDDLEWARES                               //
+// ////////////////////////////////////////////////////////////////////////
+
+export function login(user) {
+  return dispatch => {
+    dispatch(startLogin());
+
+    // call api
+    return axiosIns
+      .createInstance()
+      .post('/api/v1/users/login', user)
+      .then(response => {
+        const { token } = response.data;
+        // set token to localstorage
+        LocalStorage.setToken(token);
+
+        dispatch(endLogin(response.data.user, response.data.success));
+      })
+      .catch(error => {
+        dispatch(loginError(error.response.data.errors));
+      });
+  };
+}
+
+export function logOut() {
+  return { type: LOGOUT };
+}
+
 export function updateUserInfo(user) {
   return dispatch => {
     dispatch(startFetch());
@@ -26,16 +76,27 @@ export function updateUserInfo(user) {
     const token = LocalStorage.getToken();
     const userInToken = jwt.decode(token);
 
-    if (!userInToken || !userInToken.id) {
-      return dispatch(fetchError());
+    if (!token || !userInToken || !userInToken.id) {
+      LocalStorage.removeToken();
+      dispatch(
+        fetchError([{ message: 'Not Authenticated! Redirecting to login...' }])
+      );
+      dispatch(clearNotifications());
+      dispatch(push('/login'));
+      return {};
     }
 
-    return authAxios
+    const axiosInstance = axiosIns.createInstance();
+
+    return axiosInstance
       .patch(`/api/v1/users/${userInToken.id}`, user)
       .then(response => {
         dispatch(stopFetch(response.data.attributes, response.data.success));
       })
       .catch(err => {
+        if (err.response.status === 401) {
+          LocalStorage.removeToken();
+        }
         dispatch(fetchError(err.response.data.errors));
       });
   };
@@ -47,14 +108,29 @@ export function fetchUser() {
 
     // tach token -> lay id
     const token = LocalStorage.getToken();
-    const { id } = jwt.decode(token);
+    const userInToken = jwt.decode(token);
 
-    return authAxios
-      .get(`/api/v1/users/${id}`)
+    if (!token || !userInToken || !userInToken.id) {
+      LocalStorage.removeToken();
+      dispatch(
+        fetchError([{ message: 'Not Authenticated! Redirecting to login...' }])
+      );
+      dispatch(clearNotifications());
+      dispatch(push('/login'));
+      return {};
+    }
+
+    const axiosInstance = axiosIns.createInstance();
+
+    return axiosInstance
+      .get(`/api/v1/users/${userInToken.id}`)
       .then(response => {
         dispatch(stopFetch(response.data.attributes, response.data.success));
       })
       .catch(err => {
+        if (err.response.status === 401) {
+          LocalStorage.removeToken();
+        }
         dispatch(fetchError(err.response.data.errors));
       });
   };
@@ -66,14 +142,29 @@ export function changePassword(user) {
 
     // tach token -> lay id
     const token = LocalStorage.getToken();
-    const { id } = jwt.decode(token);
+    const userInToken = jwt.decode(token);
 
-    return authAxios
-      .patch(`/api/v1/users/${id}/password`, user)
+    if (!token || !userInToken || !userInToken.id) {
+      LocalStorage.removeToken();
+      dispatch(
+        fetchError([{ message: 'Not Authenticated! Redirecting to login...' }])
+      );
+      dispatch(clearNotifications());
+      dispatch(push('/login'));
+      return {};
+    }
+
+    const axiosInstance = axiosIns.createInstance();
+
+    return axiosInstance
+      .patch(`/api/v1/users/${userInToken.id}/password`, user)
       .then(response => {
         dispatch(stopFetch(response.data.attributes, response.data.success));
       })
       .catch(err => {
+        if (err.response.status === 401) {
+          LocalStorage.removeToken();
+        }
         dispatch(fetchError(err.response.data.errors));
       });
   };

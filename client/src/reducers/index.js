@@ -1,16 +1,17 @@
 import { combineReducers } from 'redux';
+import { connectRouter } from 'connected-react-router';
 import turn from './turn.reducer';
 import winner from './winner.reducer';
-import history from './history.reducer';
+import historyReducer from './history.reducer';
 import register from './register.reducer';
-import login from './login.reducer';
 import account from './account.reducer';
 
-export default combineReducers({
-  xIsNext: turn,
-  winner,
-  history,
-  register,
-  login,
-  account
-});
+export default history =>
+  combineReducers({
+    router: connectRouter(history),
+    xIsNext: turn,
+    winner,
+    historyReducer,
+    register,
+    account
+  });
