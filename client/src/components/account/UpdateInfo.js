@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import jwt from 'jsonwebtoken';
 import { Card, Form, Input, Button, Select, Alert } from 'antd';
+import shortId from 'shortid';
 import LocalStorage from '../../utils/LocalStorage';
 import './index.scss';
 
@@ -43,6 +44,7 @@ const UpdateInfo = ({ form, user, update, fetch, success, errors }) => {
       {errors &&
         errors.map(err => (
           <Alert
+            key={shortId.generate()}
             className='alert'
             type='error'
             message={err.code}

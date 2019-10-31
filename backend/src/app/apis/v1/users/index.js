@@ -8,10 +8,12 @@ const {
   changePassword
 } = require("@services/user/user.service");
 
+const auth = require("@middlewares/auth");
+
 const router = express.Router();
 
 // get info of user
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", auth, async (req, res, next) => {
   // get by id
   const id = req.params.id;
   try {
@@ -40,7 +42,7 @@ router.post("/", async (req, res, next) => {
 });
 
 // update thong tin ca nhan
-router.patch("/:id", async (req, res, next) => {
+router.patch("/:id", auth, async (req, res, next) => {
   const id = req.params.id;
   const { name, sex, address } = req.body;
 
@@ -54,7 +56,7 @@ router.patch("/:id", async (req, res, next) => {
 });
 
 // thay doi password
-router.patch("/:id/password", async (req, res, next) => {
+router.patch("/:id/password", auth, async (req, res, next) => {
   const id = req.params.id;
 
   const { currentPw, newPassword, retype } = req.body;

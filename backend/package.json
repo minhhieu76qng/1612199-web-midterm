@@ -32,6 +32,7 @@
   "_moduleAliases": {
     "@apis": "src/app/apis",
     "@models": "src/app/models",
-    "@services": "src/app/services"
+    "@services": "src/app/services",
+    "@middlewares": "src/app/middlewares"
   }
 }
