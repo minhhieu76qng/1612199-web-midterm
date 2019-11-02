@@ -1,10 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Layout, Menu, Icon } from 'antd';
 
 const { Sider, Content } = Layout;
 
 const AccountLayout = ({ children }) => {
+  const location = useLocation();
   return (
     <Layout>
       <Sider
@@ -26,12 +27,24 @@ const AccountLayout = ({ children }) => {
             </Link>
           </Menu.Item>
           <Menu.Item key='profile'>
-            <Link to='/account/edit/profiles'>
+            {/* <Link to='/account/edit/profiles'> */}
+            <Link
+              to={{
+                pathname: '/account/edit/profiles',
+                state: { from: location.pathname }
+              }}
+            >
               <Icon type='profile' /> Update profiles
             </Link>
           </Menu.Item>
           <Menu.Item key='password'>
-            <Link to='/account/edit/password'>
+            {/* <Link to='/account/edit/password'> */}
+            <Link
+              to={{
+                pathname: '/account/edit/password',
+                state: { from: location.pathname }
+              }}
+            >
               <Icon type='key' /> Change password
             </Link>
           </Menu.Item>

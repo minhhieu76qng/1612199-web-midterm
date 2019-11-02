@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, Form, Input, Button, Select, Alert } from 'antd';
 import shortId from 'shortid';
 import './index.scss';
 
-const UpdateInfo = ({ form, user, update, success, errors }) => {
+const UpdateInfo = ({ form, user, update, success, errors, clearMessage }) => {
+  document.title = 'Update profiles';
+
   const { getFieldDecorator } = form;
 
   const handleSubmit = event => {
@@ -20,6 +22,12 @@ const UpdateInfo = ({ form, user, update, success, errors }) => {
       }
     });
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      clearMessage();
+    }, 2000);
+  }, []);
 
   return (
     <Card

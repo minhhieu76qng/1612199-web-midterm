@@ -70,7 +70,7 @@ export function login(user) {
 
         dispatch(saveUserFromToken());
 
-        dispatch(endLogin(response.data.success));
+        dispatch(endLogin(null));
       })
       .catch(error => {
         dispatch(loginError(error.response.data.errors));

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import UploadAvatar from '../components/account/UploadAvatar';
-import { uploadAvatar } from '../actions/account';
+import { uploadAvatar, clearNotifications } from '../actions/account';
 
 const mapStateToProps = state => {
   return {
@@ -14,6 +14,9 @@ const mapDispatchToProps = dispatch => {
   return {
     uploadAvatar: (file, onProgress, onSuccess, onError) => {
       dispatch(uploadAvatar(file, onProgress, onSuccess, onError));
+    },
+    clearMessage: () => {
+      dispatch(clearNotifications());
     }
   };
 };

@@ -16,6 +16,8 @@ import { Link } from 'react-router-dom';
 import './index.scss';
 
 const RegisterForm = ({ form, isFetching, register, success, errors }) => {
+  document.title = 'Register';
+
   const { getFieldDecorator } = form;
 
   const handleSubmit = event => {

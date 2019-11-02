@@ -1,12 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, message, Upload, Icon, Avatar } from 'antd';
 
-const UploadAvatar = ({ user, uploadAvatar, success, errors }) => {
+const UploadAvatar = ({
+  user,
+  uploadAvatar,
+  success,
+  errors,
+  clearMessage
+}) => {
+  document.title = 'Upload avatar';
+
   const props = {
     customRequest({ file, onError, onProgress, onSuccess }) {
       uploadAvatar(file, onProgress, onSuccess, onError);
     }
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      clearMessage();
+    }, 2000);
+  }, []);
 
   return (
     <Card

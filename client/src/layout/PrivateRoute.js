@@ -3,14 +3,7 @@ import { Route, Redirect } from 'react-router-dom';
 import { Spin, Icon } from 'antd';
 import LocalStorage from '../utils/LocalStorage';
 
-const PrivateRoute = ({
-  user,
-  saveUserFromToken,
-  clearNotifications,
-  children,
-  ...rest
-}) => {
-  // clearNotifications();
+const PrivateRoute = ({ user, saveUserFromToken, children, ...rest }) => {
   // kiem tra token va user co hop le hay khong
   const storeUser = LocalStorage.getUser();
 

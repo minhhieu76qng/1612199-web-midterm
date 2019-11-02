@@ -24,6 +24,8 @@ const Login = ({
   loginWithFb,
   saveUserFromToken
 }) => {
+  document.title = 'Login';
+
   const { getFieldDecorator } = form;
 
   const handleSubmit = event => {

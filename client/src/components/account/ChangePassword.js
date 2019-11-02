@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, Form, Input, Button, Alert } from 'antd';
 import './index.scss';
 
@@ -7,8 +7,11 @@ const ChangePassword = ({
   isFetching,
   changePassword,
   success,
-  errors
+  errors,
+  clearMessage
 }) => {
+  document.title = 'Change password';
+
   const { getFieldDecorator } = form;
 
   const handleSubmit = event => {
@@ -25,6 +28,12 @@ const ChangePassword = ({
       }
     });
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      clearMessage();
+    }, 2000);
+  }, []);
 
   return (
     <Card

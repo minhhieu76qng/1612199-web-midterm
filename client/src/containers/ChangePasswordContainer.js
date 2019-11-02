@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import ChangePassword from '../components/account/ChangePassword';
-import { changePassword } from '../actions/account';
+import { changePassword, clearNotifications } from '../actions/account';
 
 const mapStateToProps = state => {
   return {
@@ -14,6 +14,9 @@ const mapDispatchToProps = dispatch => {
   return {
     changePassword: user => {
       dispatch(changePassword(user));
+    },
+    clearMessage: () => {
+      dispatch(clearNotifications());
     }
   };
 };
