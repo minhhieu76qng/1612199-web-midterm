@@ -12,12 +12,17 @@ export const START_FETCH_USER = 'START_FETCH_USER';
 export const STOP_FETCH_USER = 'STOP_FETCH_USER';
 export const FETCH_ERROR = 'FETCH_ERROR';
 export const CLEAR_NOTIFICATIONS = 'CLEAR_NOTIFICATIONS';
+export const SAVE_USER_FROM_TOKEN = 'SAVE_USER_FROM_TOKEN';
 
 export function startFetch() {
   return { type: START_FETCH_USER };
 }
 export function stopFetch(data, success) {
-  return { type: STOP_FETCH_USER, data, success };
+  if (data.token) {
+    const { token } = data;
+    LocalStorage.setToken(token);
+  }
+  return { type: STOP_FETCH_USER, data: null, success };
 }
 
 export function fetchError(errors) {
@@ -28,8 +33,8 @@ export function startLogin() {
   return { type: START_LOGIN };
 }
 
-export function endLogin(data, success) {
-  return { type: END_LOGIN, data, success };
+export function endLogin(success) {
+  return { type: END_LOGIN, success };
 }
 
 export function loginError(errors) {
@@ -44,6 +49,12 @@ export function clearNotifications() {
 //                              MIDDLEWARES                               //
 // ////////////////////////////////////////////////////////////////////////
 
+export function saveUserFromToken() {
+  const userFromToken = LocalStorage.getUser();
+
+  return { type: SAVE_USER_FROM_TOKEN, payload: userFromToken };
+}
+
 export function login(user) {
   return dispatch => {
     dispatch(startLogin());
@@ -57,7 +68,9 @@ export function login(user) {
         // set token to localstorage
         LocalStorage.setToken(token);
 
-        dispatch(endLogin(response.data.user, response.data.success));
+        dispatch(saveUserFromToken());
+
+        dispatch(endLogin(response.data.success));
       })
       .catch(error => {
         dispatch(loginError(error.response.data.errors));

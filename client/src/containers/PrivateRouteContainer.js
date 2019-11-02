@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { fetchUser } from '../actions/account';
+import { saveUserFromToken, clearNotifications } from '../actions/account';
 import PrivateRoute from '../layout/PrivateRoute';
 
 const mapStateToProps = state => {
@@ -10,8 +10,11 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchUser: () => {
-      dispatch(fetchUser());
+    saveUserFromToken: () => {
+      dispatch(saveUserFromToken());
+    },
+    clearNotifications: () => {
+      dispatch(clearNotifications());
     }
   };
 };

@@ -19,10 +19,10 @@ const Login = ({
   isFetching,
   login,
   errors,
-  fetchUser,
   user,
   loginWithGg,
-  loginWithFb
+  loginWithFb,
+  saveUserFromToken
 }) => {
   const { getFieldDecorator } = form;
 
@@ -40,9 +40,9 @@ const Login = ({
     });
   };
 
-  // component did mount
   useEffect(() => {
-    fetchUser();
+    // token -> user
+    saveUserFromToken();
   }, []);
 
   if (user) {

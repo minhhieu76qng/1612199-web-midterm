@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Card, Form, Input, Button, Select, Alert } from 'antd';
 import shortId from 'shortid';
 import './index.scss';
 
-const UpdateInfo = ({ form, user, update, fetch, success, errors }) => {
+const UpdateInfo = ({ form, user, update, success, errors }) => {
   const { getFieldDecorator } = form;
 
   const handleSubmit = event => {
@@ -20,10 +20,6 @@ const UpdateInfo = ({ form, user, update, fetch, success, errors }) => {
       }
     });
   };
-
-  useEffect(() => {
-    fetch();
-  }, []);
 
   return (
     <Card

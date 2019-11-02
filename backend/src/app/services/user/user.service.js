@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const { User } = require("@models/user.model");
 
 const SALT = 10;
@@ -218,18 +219,15 @@ const updateInfoUserById = async ({ id, name, sex, address }, next) => {
       { new: true }
     );
 
+    const token = generateToken(result);
+
     return {
       status: 200,
       success: {
         message: "Updated successfully!"
       },
       attributes: {
-        id: result._id,
-        email: result.email,
-        name: result.name,
-        address: result.address,
-        sex: result.sex,
-        avatar: result.avatar
+        token
       }
     };
   } catch (err) {
@@ -328,14 +326,15 @@ const changePassword = async ({ id, currentPw, newPassword, retype }, next) => {
       { new: true }
     );
 
+    const token = generateToken(result);
+
     return {
       status: 200,
       success: {
         message: "Updated successfully!"
       },
       attributes: {
-        id: result._id,
-        email: result.email
+        token
       }
     };
   } catch (err) {
@@ -368,23 +367,39 @@ const updateAvatarLocation = async ({ id, location }, next) => {
       { new: true }
     );
 
+    const token = generateToken(result);
+
     return {
       status: 200,
       success: {
         message: "Updated successfully!"
       },
       attributes: {
-        id: result._id,
-        email: result.email,
-        avatar: result.avatar,
-        name: result.name,
-        address: result.address,
-        sex: result.sex
+        token
       }
     };
   } catch (err) {
     next(err);
   }
+};
+
+const generateToken = user => {
+  const { JWT_SECRET_KEY } = process.env;
+  // generate token
+  const token = jwt.sign(
+    {
+      id: user._id,
+      email: user.email,
+      avatar: user.avatar,
+      sex: user.sex,
+      name: user.name,
+      address: user.address
+    },
+    JWT_SECRET_KEY,
+    { expiresIn: "1d" }
+  );
+
+  return token;
 };
 
 module.exports = {
@@ -395,5 +410,6 @@ module.exports = {
   updateInfoUserById,
   changePassword,
   comparePassword,
-  updateAvatarLocation
+  updateAvatarLocation,
+  generateToken
 };

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import WrappedLogin from '../components/login_register/Login';
-import { fetchUser, login } from '../actions/account';
+import { saveUserFromToken, login } from '../actions/account';
 
 const mapStateToProps = state => {
   return {
@@ -16,8 +16,8 @@ const mapDispatchToProps = dispatch => {
     login: user => {
       dispatch(login(user));
     },
-    fetchUser: () => {
-      dispatch(fetchUser());
+    saveUserFromToken: () => {
+      dispatch(saveUserFromToken());
     }
   };
 };

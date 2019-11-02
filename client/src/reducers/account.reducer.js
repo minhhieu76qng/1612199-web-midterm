@@ -6,7 +6,8 @@ import {
   END_LOGIN,
   LOGIN_ERROR,
   LOGOUT,
-  CLEAR_NOTIFICATIONS
+  CLEAR_NOTIFICATIONS,
+  SAVE_USER_FROM_TOKEN
 } from '../actions/account';
 
 const initialState = {
@@ -29,7 +30,6 @@ export default function account(state = initialState, action) {
       return {
         ...state,
         isFetching: false,
-        user: action.data,
         success: action.success
       };
     case LOGIN_ERROR:
@@ -54,6 +54,8 @@ export default function account(state = initialState, action) {
       return { ...state, isFetching: false, errors: action.errors };
     case CLEAR_NOTIFICATIONS:
       return { ...state, isFetching: false, errors: null, success: null };
+    case SAVE_USER_FROM_TOKEN:
+      return { ...state, isFetching: false, user: action.payload };
 
     default:
       return state;

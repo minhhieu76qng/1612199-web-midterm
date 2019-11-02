@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import UpdateInfo from '../components/account/UpdateInfo';
-import { updateUserInfo, fetchUser } from '../actions/account';
+import { updateUserInfo } from '../actions/account';
 
 const mapStateToProps = state => {
   return {
@@ -14,9 +14,6 @@ const mapDispatchToProps = dispatch => {
   return {
     update: user => {
       dispatch(updateUserInfo(user));
-    },
-    fetch: () => {
-      dispatch(fetchUser());
     }
   };
 };
