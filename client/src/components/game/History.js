@@ -1,39 +1,36 @@
 import React from 'react';
 import { List, Button, Card } from 'antd';
+import uuidv1 from 'uuid/v1';
 
 const History = ({ history, jumpTo, toggleSort, selected, sort }) => {
-  const renderMoves = () => {
-    if (!history) return <></>;
+  if (!history) return <></>;
 
-    // default : sort = true
+  // clone to new history
+  const his = [...history];
 
-    // clone to new history
-    let his = [...history];
-    his = his.sort((p1, p2) => {
-      const comp = p1.id <= p2.id;
-      return comp === sort ? -1 : 1;
-    });
+  const moves = his.map((step, idx) => {
+    const { lastPosition } = step;
+    const desc = idx
+      ? `Move to #${idx}. Position [${lastPosition.x},${lastPosition.y}]`
+      : 'Go to game start';
 
-    return his.map(step => {
-      const { lastPosition, id } = step;
-      const desc = id
-        ? `Move to #${id}. Position [${lastPosition.x},${lastPosition.y}]`
-        : 'Go to game start';
+    const isSelect = idx === selected;
+    return (
+      <List.Item key={uuidv1()}>
+        <Button
+          type={isSelect ? 'primary' : 'default'}
+          block
+          onClick={() => jumpTo(idx)}
+        >
+          {desc}
+        </Button>
+      </List.Item>
+    );
+  });
 
-      const isSelect = id === selected;
-      return (
-        <List.Item key={id}>
-          <Button
-            type={isSelect ? 'primary' : 'default'}
-            block
-            onClick={() => jumpTo(id)}
-          >
-            {desc}
-          </Button>
-        </List.Item>
-      );
-    });
-  };
+  if (!sort) {
+    moves.reverse();
+  }
 
   const sortIcon = sort ? 'down' : 'up';
 
@@ -57,7 +54,7 @@ const History = ({ history, jumpTo, toggleSort, selected, sort }) => {
         size='small'
         split={false}
       >
-        {renderMoves()}
+        {moves}
       </List>
     </Card>
   );

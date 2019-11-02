@@ -1,24 +1,21 @@
 import React from 'react';
 import uuidv1 from 'uuid/v1';
-import Cell from './Cell';
 import Line from './Line';
+import CellContainer from '../../containers/CellContainer';
 
-const Board = ({ board, onClick, winner, listPoints }) => {
+const Board = ({ board, winner, listPoints }) => {
   const renderBoard = () => {
     return board.map((row, iRow) => {
       return (
-        // eslint-disable-next-line react/no-array-index-key
-        <div key={iRow} className='board-row'>
+        <div key={uuidv1()} className='board-row'>
           {row.map((cell, iCol) => {
             return (
-              <Cell
-                // eslint-disable-next-line react/no-array-index-key
+              <CellContainer
                 key={uuidv1()}
                 row={iRow}
                 col={iCol}
                 val={cell}
-                onClick={onClick}
-                winner={winner}
+                stop={winner !== null}
               />
             );
           })}
@@ -54,11 +51,6 @@ const Board = ({ board, onClick, winner, listPoints }) => {
       <svg className='draw-lines'>{winner !== null && renderLines()}</svg>
     </div>
   );
-};
-
-Board.defaultProps = {
-  size: 20,
-  numToWin: 5
 };
 
 export default Board;

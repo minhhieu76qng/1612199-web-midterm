@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import WrappedRegisterForm from '../components/login_register/Register';
-import { register } from '../actions';
+import { register } from '../actions/register';
 
 const mapStateToProps = state => {
   return {

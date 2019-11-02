@@ -1,4 +1,8 @@
-import { START_REGISTER, END_REGISTER, REGISTER_ERROR } from '../actions';
+import {
+  START_REGISTER,
+  END_REGISTER,
+  REGISTER_ERROR
+} from '../actions/register';
 
 const initialState = {
   isFetching: false,
