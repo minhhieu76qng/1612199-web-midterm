@@ -1,6 +1,6 @@
 import React from 'react';
 import { Menu, Icon, Button } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useRouteMatch } from 'react-router-dom';
 import LocalStorage from '../../utils/LocalStorage';
 import './index.scss';
 
@@ -10,22 +10,27 @@ const NavBar = ({ user, logOut }) => {
     LocalStorage.removeToken();
     logOut();
   };
+
+  const location = useLocation();
+  const { url } = useRouteMatch();
+
   return (
     <Menu
       theme='dark'
       mode='horizontal'
-      defaultSelectedKeys='home'
+      defaultSelectedKeys={['/']}
+      selectedKeys={[url]}
       style={{ lineHeight: '64px' }}
     >
-      <Menu.Item key='home'>
-        <Link to='/'>
-          <Icon type='home' />
-          Home
+      <Menu.Item key='/account'>
+        <Link to={{ pathname: '/account', state: { from: location.pathname } }}>
+          <Icon type='user' />
+          Account
         </Link>
       </Menu.Item>
 
-      <Menu.Item key='game'>
-        <Link to='/game'>
+      <Menu.Item key='/game'>
+        <Link to={{ pathname: '/game', state: { from: location.pathname } }}>
           <Icon type='coffee' />
           Game
         </Link>
