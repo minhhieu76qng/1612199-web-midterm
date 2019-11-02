@@ -11,11 +11,13 @@ const LayoutPage = ({ children }) => {
         minHeight: '100vh'
       }}
     >
-      <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+      <Header
+        style={{ position: 'fixed', zIndex: 1, width: '100%', height: '40px' }}
+      >
         <div className='logo' />
         <NavBarContainer />
       </Header>
-      <Layout style={{ position: 'relative', marginTop: 64 }}>
+      <Layout style={{ position: 'relative', marginTop: 40 }}>
         {children}
       </Layout>
     </Layout>

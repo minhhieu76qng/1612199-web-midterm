@@ -20,7 +20,7 @@ const NavBar = ({ user, logOut }) => {
       mode='horizontal'
       defaultSelectedKeys={['/']}
       selectedKeys={[url]}
-      style={{ lineHeight: '64px' }}
+      style={{ lineHeight: '40px' }}
     >
       <Menu.Item key='/account'>
         <Link to={{ pathname: '/account', state: { from: location.pathname } }}>

@@ -39,6 +39,7 @@ const History = ({ history, jumpTo, toggleSort, selected, sort }) => {
 
   return (
     <Card
+      size='small'
       title='History'
       className='game-card history-block'
       extra={

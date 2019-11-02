@@ -380,15 +380,10 @@ const Game = ({
   };
 
   return (
-    <div className='game-wrapper' style={{ minHeight: window.innerHeight }}>
-      <Row>
-        <Col xs={24} md={18}>
-          <Row
-            type='flex'
-            style={{ height: window.innerHeight }}
-            justify='center'
-            align='top'
-          >
+    <div className='game-wrapper' style={{ flexGrow: 1 }}>
+      <Row type='flex' justify='space-between'>
+        <Col xs={24} md={12}>
+          <Row type='flex' justify='center' align='top'>
             <Col>
               <Board
                 listPoints={listPointsDisplay}
@@ -401,8 +396,12 @@ const Game = ({
           </Row>
         </Col>
 
-        <Col xs={24} md={6}>
-          <Card title='Game infomation' className='game-card game-info'>
+        <Col xs={24} md={8}>
+          <Card
+            title='Game infomation'
+            className='game-card game-info'
+            size='small'
+          >
             <p>{showPlayer()}</p>
 
             <Button type='primary' onClick={() => setOpen(true)}>
