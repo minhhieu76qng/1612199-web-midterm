@@ -7,8 +7,12 @@ const Cell = ({ row, col, val, mark, xIsNext, stop }) => {
   }
 
   const handleClick = () => {
-    if (!stop) {
-      mark(row, col, xIsNext ? 1 : 0);
+    // if (!stop) {
+    //   mark(row, col, xIsNext ? 1 : 0);
+    // }
+
+    if (!stop && xIsNext) {
+      mark(row, col, 1);
     }
   };
 

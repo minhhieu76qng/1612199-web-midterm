@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Button, Modal } from 'antd';
 import { isFull, isTerminated } from '../../algorithms/boardChecking';
 import Board from './Board';
 import History from './History';
+import { generatePosition } from '../../algorithms/AI';
 
-const Game = ({ xIsNext, list, step, jumpTo, resetGame }) => {
+const Game = ({ xIsNext, list, step, jumpTo, resetGame, mark }) => {
   const [open, setOpen] = useState(false);
   const [sortASC, setSort] = useState(true);
 
@@ -64,10 +65,17 @@ const Game = ({ xIsNext, list, step, jumpTo, resetGame }) => {
     });
   };
 
+  useEffect(() => {
+    if (!xIsNext && !hasWinner) {
+      const pos = generatePosition(board);
+      mark(pos.row, pos.col, 0);
+    }
+  });
+
   return (
     <div className='game-wrapper' style={{ flexGrow: 1 }}>
       <Row type='flex' justify='space-between'>
-        <Col xs={24} md={12}>
+        <Col xs={24} md={16}>
           <Row type='flex' justify='center' align='top'>
             <Col>
               <Board listPoints={points} board={board} winner={winner} />

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import Game from '../components/game/Game';
-import { resetGame, jumpTo } from '../actions/game';
+import { resetGame, jumpTo, mark } from '../actions/game';
 
 const mapStateToProps = state => ({
   xIsNext: state.game.xIsNext,
@@ -12,6 +12,9 @@ const mapDispatchToProps = dispatch => ({
   resetGame: () => dispatch(resetGame()),
   jumpTo: step => {
     dispatch(jumpTo(step));
+  },
+  mark: (row, col, player) => {
+    dispatch(mark(row, col, player));
   }
 });
 
