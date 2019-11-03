@@ -66,6 +66,11 @@ button.board-cell {
   cursor: pointer;
 }
 
+.player {
+  font-family: 'Permanent Marker', cursive;
+  font-weight: 900;
+}
+
 .player.X {
   color: rgb(255, 0, 0);
 }

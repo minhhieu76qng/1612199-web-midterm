@@ -26,6 +26,8 @@ const Game = ({ xIsNext, list, step, jumpTo, resetGame, mark }) => {
 
     if (hasWinner) {
       winner = board[lastPosition.x][lastPosition.y];
+    } else if (isFull(board)) {
+      winner = '-1';
     }
   }
 
@@ -79,6 +81,41 @@ const Game = ({ xIsNext, list, step, jumpTo, resetGame, mark }) => {
     }
   });
 
+  const showResult = () => {
+    let text = null;
+    switch (winner) {
+      case -1:
+        text = 'XO';
+        break;
+      case 0:
+        text = 'O';
+        break;
+      case 1:
+        text = 'X';
+        break;
+      default:
+        break;
+    }
+    return (
+      <Modal
+        title='Result'
+        visible={winner !== null}
+        onOk={resetGame}
+        cancelButtonProps={{ disabled: true }}
+      >
+        <div style={{ textAlign: 'center' }}>
+          <p style={{ marginBottom: 20 }}>Winner</p>
+          <p
+            style={{ fontSize: 100, marginBottom: 0, lineHeight: 1 }}
+            className={`player ${text}`}
+          >
+            {text}
+          </p>
+        </div>
+      </Modal>
+    );
+  };
+
   return (
     <div className='game-wrapper' style={{ flexGrow: 1 }}>
       <Prompt message='Are you sure you want to leave?' />
@@ -114,6 +151,7 @@ const Game = ({ xIsNext, list, step, jumpTo, resetGame, mark }) => {
       </Row>
 
       {open && showConfirm()}
+      {winner !== null && showResult()}
     </div>
   );
 };
