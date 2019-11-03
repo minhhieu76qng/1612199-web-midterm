@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Button, Modal } from 'antd';
+import { Prompt } from 'react-router-dom';
 import { isFull, isTerminated } from '../../algorithms/boardChecking';
 import Board from './Board';
 import History from './History';
 import { generatePosition } from '../../algorithms/AI';
 
 const Game = ({ xIsNext, list, step, jumpTo, resetGame, mark }) => {
+  document.title = 'Play with bot';
+
   const [open, setOpen] = useState(false);
   const [sortASC, setSort] = useState(true);
 
@@ -66,6 +69,10 @@ const Game = ({ xIsNext, list, step, jumpTo, resetGame, mark }) => {
   };
 
   useEffect(() => {
+    resetGame();
+  }, []);
+
+  useEffect(() => {
     if (!xIsNext && !hasWinner) {
       const pos = generatePosition(board);
       mark(pos.row, pos.col, 0);
@@ -74,6 +81,7 @@ const Game = ({ xIsNext, list, step, jumpTo, resetGame, mark }) => {
 
   return (
     <div className='game-wrapper' style={{ flexGrow: 1 }}>
+      <Prompt message='Are you sure you want to leave?' />
       <Row type='flex' justify='space-between'>
         <Col xs={24} md={16}>
           <Row type='flex' justify='center' align='top'>

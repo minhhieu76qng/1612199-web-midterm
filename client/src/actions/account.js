@@ -116,40 +116,6 @@ export function updateUserInfo(user) {
   };
 }
 
-export function fetchUser() {
-  return dispatch => {
-    dispatch(startFetch());
-
-    // tach token -> lay id
-    const token = LocalStorage.getToken();
-    const userInToken = jwt.decode(token);
-
-    if (!token || !userInToken || !userInToken.id) {
-      LocalStorage.removeToken();
-      dispatch(
-        fetchError([{ message: 'Not Authenticated! Redirecting to login...' }])
-      );
-      dispatch(clearNotifications());
-      dispatch(push('/login'));
-      return {};
-    }
-
-    const axiosInstance = axiosIns.createInstance();
-
-    return axiosInstance
-      .get(`/api/v1/users/${userInToken.id}`)
-      .then(response => {
-        dispatch(stopFetch(response.data.attributes, response.data.success));
-      })
-      .catch(err => {
-        if (err.response.status === 401) {
-          LocalStorage.removeToken();
-        }
-        dispatch(fetchError(err.response.data.errors));
-      });
-  };
-}
-
 export function changePassword(user) {
   return dispatch => {
     dispatch(startFetch());

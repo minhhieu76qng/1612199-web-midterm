@@ -1,8 +1,9 @@
 import React from 'react';
 import { Switch, Route, useRouteMatch, Link } from 'react-router-dom';
 import { Result } from 'antd';
-import IndexPage from '../components/game/IndexPage';
 import GameContainer from '../containers/GameContainer';
+import GameIndexContainer from '../containers/GameIndexContainer';
+import GameWithHumanContainer from '../containers/GameWithHumanContainer';
 
 const GameScene = () => {
   const { path } = useRouteMatch();
@@ -12,14 +13,13 @@ const GameScene = () => {
       {/* route default: chọn giữa đánh với máy và người */}
 
       <Route exact path={`${path}`}>
-        <IndexPage />
+        <GameIndexContainer />
       </Route>
       <Route exact path={`${path}/with-bot`}>
         <GameContainer />
       </Route>
       <Route exact path={`${path}/with-human`}>
-        {/* <GameContainer /> */}
-        <div>human</div>
+        <GameWithHumanContainer />
       </Route>
       <Route path='*'>
         <Result
