@@ -15,6 +15,7 @@ function ServerSocket(server) {
   io.on("connection", function(socket) {
     socket.on("set_name", function(userID) {
       socket.name = userID;
+      // RECONNECT ROOM
       // check player co trong listRoom hay khong
       const iterator = listRoom.entries();
 
@@ -90,8 +91,13 @@ function ServerSocket(server) {
       io.to(roomID).emit("has_message", { userID, name, msg });
     });
 
+    socket.on("fetch_game_data", function(roomID) {
+      const gameData = listRoom.get(roomID);
+      socket.emit("receive_game_data", gameData);
+    });
+
     socket.on("disconnect", () => {
-      console.log("disconnect");
+      // console.log("disconnect");
     });
   });
 }

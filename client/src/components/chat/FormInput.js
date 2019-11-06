@@ -53,6 +53,7 @@ const FormInput = ({ form, addMessage, roomID }) => {
       layout='horizontal'
       style={{ display: 'flex' }}
       onSubmit={handleSubmit}
+      autoComplete='off'
     >
       <Form.Item style={{ marginBottom: 0, flexGrow: 1, marginRight: 20 }}>
         {getFieldDecorator('message', {
