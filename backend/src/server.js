@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 5000;
 
 if (process.env.NODE_ENV === 'production') {
   server.listen(PORT, function () {
-    console.log(`Server is running at http://${HOST}:${PORT}`);
+    console.log(`Server is running at port ${PORT}`);
   });
 
 } else {
