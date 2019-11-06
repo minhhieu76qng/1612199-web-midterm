@@ -15,6 +15,19 @@ function ServerSocket(server) {
   io.on("connection", function(socket) {
     socket.on("set_name", function(userID) {
       socket.name = userID;
+      // check player co trong listRoom hay khong
+      const iterator = listRoom.entries();
+
+      for (const item of iterator) {
+        const value = item[1];
+        const roomID = item[0];
+
+        if (value.players.includes(socket.name)) {
+          const player =
+            value.players.indexOf(socket.name) === 0 ? PLAYER.X : PLAYER.O;
+          io.to(socket.id).emit("created_room", roomID, player);
+        }
+      }
     });
 
     socket.on("match_making", async function() {

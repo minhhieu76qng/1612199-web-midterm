@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Row, Col, Card, Button } from 'antd';
-import { Prompt, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import ChatBox from '../chat/Chat';
 
 const GameWithHuman = ({ roomID, clearMatch }) => {
@@ -16,7 +16,7 @@ const GameWithHuman = ({ roomID, clearMatch }) => {
   }
   return (
     <div className='game-wrapper' style={{ flexGrow: 1 }}>
-      <Prompt message='Are you sure you want to leave?' />
+      {/* <Prompt message='Are you sure you want to leave?' /> */}
       <Row type='flex' justify='space-between'>
         <Col xs={24} md={12}>
           fg
