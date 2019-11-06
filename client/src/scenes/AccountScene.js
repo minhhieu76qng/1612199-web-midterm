@@ -1,7 +1,7 @@
 import React from 'react';
-import { Switch, Route, useRouteMatch, Link } from 'react-router-dom';
+import { Switch, Route, useRouteMatch, Link, Redirect } from 'react-router-dom';
 import { Result } from 'antd';
-import AccountView from '../components/account/AccountView';
+// import AccountView from '../components/account/AccountView';
 import AccountLayout from '../layout/AccountLayout';
 import UpdateInfoContainer from '../containers/UpdateInfoContainer';
 import ChangePasswordContainer from '../containers/ChangePasswordContainer';
@@ -17,7 +17,8 @@ const AccountScene = () => {
       <div style={{ padding: 24, overflow: 'initial' }}>
         <Switch>
           <Route exact path={path}>
-            <AccountView />
+            {/* <AccountView /> */}
+            <Redirect to={`${path}/edit/profiles`} />
           </Route>
           <Route exact path={`${path}/edit/profiles`}>
             <UpdateInfoContainer />

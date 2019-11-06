@@ -107,8 +107,9 @@ function ServerSocket(server) {
       // tìm kiếm người chơi còn lại trong danh sách -> winner
 
       const players = listRoom.get(roomID).players;
+      const loser = socket.name;
 
-      // kiem tra ong user xin hoa co la player trong phong hay khong
+      // kiem tra ong user dau hang co la player trong phong hay khong
       const indexOfLoser = players.indexOf(loser);
       if (indexOfLoser !== -1) {
         const winner = players.filter(p => p !== loser);
@@ -128,7 +129,33 @@ function ServerSocket(server) {
       }
     });
 
-    socket.on("ask_for_draw", roomID => {});
+    socket.on("ask_for_draw", async roomID => {
+      const players = listRoom.get(roomID).players;
+      const petitioner = socket.name;
+
+      // kiem tra ong user xin hoa co la player trong phong hay khong
+      const indexOfPetitioner = players.indexOf(petitioner);
+      if (indexOfPetitioner !== -1) {
+        // gửi thông báo hỏi ông kia có cho hòa hay không.
+        socket.to(roomID).emit("competitor_ask_for_draw");
+      }
+    });
+
+    socket.on("result_ask_for_draw", async (isAccepted, roomID) => {
+      if (isAccepted) {
+        // set draw
+        const result = await saveDraw(roomID);
+
+        if (result === true) {
+          // xoa phong choi
+          listRoom.delete(roomID);
+          // emit thông tin winner ra màn hình cả 2 người chơi.
+          return io.in(roomID).emit("show_result", null, null);
+        }
+      } else {
+        socket.to(roomID).emit("result_ask", false);
+      }
+    });
 
     socket.on("disconnect", () => {
       // console.log("disconnect");

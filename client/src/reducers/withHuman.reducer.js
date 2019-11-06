@@ -16,7 +16,6 @@ const initialState = {
       lastPosition: null
     }
   ],
-  step: 0,
   messages: [],
   roomID: null
 };

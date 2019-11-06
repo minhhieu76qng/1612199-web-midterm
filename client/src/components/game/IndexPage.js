@@ -56,13 +56,9 @@ const IndexPage = ({ setRoom, push }) => {
         >
           <Card
             hoverable
-            style={{ maxWidth: 500 }}
-            cover={
-              <img
-                src='http://fs5.directupload.net/images/170310/4vxzteu6.jpg'
-                alt='Play card'
-              />
-            }
+            style={{ maxWidth: 350 }}
+            title='Play with Bot'
+            cover={<img src='/gameWithBot.PNG' alt='Play card' />}
           >
             <Link to={`${url}/with-bot`}>
               <Button type='primary' block size='large'>
@@ -72,13 +68,9 @@ const IndexPage = ({ setRoom, push }) => {
           </Card>
           <Card
             hoverable
-            style={{ maxWidth: 500 }}
-            cover={
-              <img
-                src='http://www.gamersonlinux.com/forum/attachments/league81-jpg.10714/'
-                alt='Play card'
-              />
-            }
+            style={{ maxWidth: 350 }}
+            title='Play with Human'
+            cover={<img src='/gameWithHuman.PNG' alt='Play card' />}
           >
             <Button type='primary' block size='large' onClick={handleClick}>
               Play now

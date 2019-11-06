@@ -3,6 +3,7 @@ import { Row, Col, Card, Button, Spin, Modal } from 'antd';
 import { Redirect } from 'react-router-dom';
 import ChatBox from '../chat/Chat';
 import socketio from '../../socketio';
+// import Board from './Board';
 
 const GameWithHuman = ({
   isFetching,
@@ -16,6 +17,8 @@ const GameWithHuman = ({
 
   const [winner, setWinner] = useState(null);
   const [winnerText, setWinnerText] = useState(null);
+
+  const [askModal, setAskModal] = useState(false);
 
   // có một socket để fetch message và ván đấu về lại client
   // data là một object gồm board, messages, xIsNext
@@ -42,12 +45,22 @@ const GameWithHuman = ({
         setWinnerText('Draw');
       }
     });
+
+    s.on('competitor_ask_for_draw', () => {
+      setAskModal(true);
+    });
+
+    s.on('result_ask', () => {
+      setFetching(false);
+    });
   }, []);
 
   useEffect(() => {
     return () => {
       s.off('receive_game_data');
       s.off('show_result');
+      s.off('competitor_ask_for_draw');
+      s.off('result_ask');
       clearMatch();
     };
   }, []);
@@ -64,20 +77,30 @@ const GameWithHuman = ({
     clearMatch();
   };
 
+  const handleBtnDraw = isAccepted => {
+    s.emit('result_ask_for_draw', isAccepted, roomID);
+    setAskModal(false);
+  };
+
+  const handleBtnAsk = () => {
+    setFetching(true);
+    s.emit('ask_for_draw', roomID);
+  };
   return (
     <div className='game-wrapper' style={{ flexGrow: 1 }}>
       {/* <Prompt message='Are you sure you want to leave?' /> */}
       <Spin tip='Loadding...' spinning={isFetching} size='large'>
         <Row type='flex' justify='space-between'>
           <Col xs={24} md={12}>
-            fg
+            {/* <Board listPoints={points} board={board} winner={winner} /> */}
+            {/* <Board /> */}
           </Col>
 
           <Col xs={24} md={12}>
             <div style={{ overflow: 'hidden' }}>
               <Row gutter={20}>
-                <Col span={14}>history</Col>
-                <Col span={10}>
+                <Col span={12}>history</Col>
+                <Col span={12}>
                   <Row gutter={20}>
                     <Col span={24}>
                       <Card title='Chat Box' size='small'>
@@ -95,8 +118,9 @@ const GameWithHuman = ({
                             backgroundColor: '#2ecc71',
                             marginRight: 10
                           }}
+                          onClick={handleBtnAsk}
                         >
-                          Tie
+                          Ask for draw
                         </Button>
                         <Button type='danger' onClick={surrender}>
                           Surrender
@@ -136,6 +160,19 @@ const GameWithHuman = ({
             {winner}
           </p>
         </div>
+      </Modal>
+
+      <Modal
+        title='Ask for a draw game'
+        visible={askModal}
+        okText='Yes'
+        cancelText='No'
+        onOk={() => handleBtnDraw(true)}
+        onCancel={() => handleBtnDraw(false)}
+      >
+        <p style={{ fontSize: 25 }}>
+          Your competitor ask you for a draw game. Do you agree?
+        </p>
       </Modal>
     </div>
   );
