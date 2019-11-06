@@ -1,46 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button, Spin } from 'antd';
-import { Link, useRouteMatch, useHistory } from 'react-router-dom';
+import { Link, useRouteMatch, Redirect } from 'react-router-dom';
 import socketio from '../../socketio';
 import LocalStorage from '../../utils/LocalStorage';
 
-const IndexPage = ({ setRoom }) => {
-  document.title = 'Game Lobby';
+const IndexPage = ({ setRoom, push }) => {
+  const s = socketio.open();
 
-  const socket = socketio;
+  useEffect(() => {
+    return () => {
+      s.emit('cancle_lobby');
+      s.off('created_room');
+    };
+  }, []);
+  document.title = 'Game Lobby';
 
   const { url } = useRouteMatch();
   const [matchMaking, setMatchMaking] = useState(false);
 
-  const history = useHistory();
+  const user = LocalStorage.getUser();
+
+  if (!(user && user.id)) {
+    return <Redirect to='/login' />;
+  }
+
+  s.emit('set_name', user.id);
 
   const handleClick = () => {
-    const user = LocalStorage.getUser();
-
-    if (!(user && user.id)) {
-      return;
-    }
-
-    socket.emit('matchMaking', user.id);
+    s.emit('match_making', user.id);
     setMatchMaking(true);
   };
-  socket.on('created_room', roomID => {
-    // emit de join vao roomID
-    socket.emit('joinGame', roomID, () => {
-      // setstate -> redirect
-      // clear state
-      // clearMatch();
+
+  s.on('created_room', roomID => {
+    s.emit('join_game', roomID, () => {
       setMatchMaking(false);
       setRoom(roomID);
-      history.push(`${url}/with-human`);
+      push(`${url}/with-human`);
     });
   });
-
-  useEffect(() => {
-    return () => {
-      socket.off('created_room');
-    };
-  }, []);
 
   return (
     <div style={{ flexGrow: 1 }}>

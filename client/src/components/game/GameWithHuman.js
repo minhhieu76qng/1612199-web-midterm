@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Row, Col, Card, Button } from 'antd';
-import { Prompt } from 'react-router-dom';
+import { Prompt, Redirect } from 'react-router-dom';
 import ChatBox from '../chat/Chat';
 
-const GameWithHuman = ({ clearMatch }) => {
+const GameWithHuman = ({ roomID, clearMatch }) => {
   document.title = 'Play with human';
+  useEffect(() => {
+    return () => {
+      clearMatch();
+    };
+  }, []);
 
-  clearMatch();
+  if (!roomID) {
+    return <Redirect to='/game' />;
+  }
   return (
     <div className='game-wrapper' style={{ flexGrow: 1 }}>
       <Prompt message='Are you sure you want to leave?' />
