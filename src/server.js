@@ -11,6 +11,14 @@ ioFunc(server);
 const HOST = process.env.HOST || "127.0.0.1";
 const PORT = process.env.PORT || 5000;
 
-server.listen(PORT, HOST, function() {
-  console.log(`Server is running at http://${HOST}:${PORT}`);
-});
+if (process.env.NODE_ENV === 'production') {
+  server.listen(PORT, function () {
+    console.log(`Server is running at http://${HOST}:${PORT}`);
+  });
+
+} else {
+  server.listen(PORT, HOST, function () {
+    console.log(`Server is running at http://${HOST}:${PORT}`);
+  });
+
+}
