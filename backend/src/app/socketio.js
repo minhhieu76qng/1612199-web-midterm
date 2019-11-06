@@ -1,5 +1,9 @@
 const socketio = require("socket.io");
-const { createNewMatch } = require("@services/match/match.service");
+const {
+  createNewMatch,
+  saveWinner,
+  saveDraw
+} = require("@services/match/match.service");
 
 let lobby = [];
 let listRoom = new Map();
@@ -64,7 +68,9 @@ function ServerSocket(server) {
         // tao room
         listRoom.set(`${roomID}`, {
           players: [player1.userID, player2.userID],
-          messages: []
+          messages: [],
+          winner: null,
+          xIsNext: true
         });
       }
     });
@@ -95,6 +101,34 @@ function ServerSocket(server) {
       const gameData = listRoom.get(roomID);
       socket.emit("receive_game_data", gameData);
     });
+
+    socket.on("surrender", async roomID => {
+      // có socket.name -> lưu thông tin người thắng vào db
+      // tìm kiếm người chơi còn lại trong danh sách -> winner
+
+      const players = listRoom.get(roomID).players;
+
+      // kiem tra ong user xin hoa co la player trong phong hay khong
+      const indexOfLoser = players.indexOf(loser);
+      if (indexOfLoser !== -1) {
+        const winner = players.filter(p => p !== loser);
+
+        // luu thong tin nguoi thang vao trong db
+        const result = await saveWinner(roomID, winner[0]);
+
+        if (result === true) {
+          // indexOfLoser === 0 -> loser = X
+          const winnerChar = indexOfLoser === 0 ? "O" : "X";
+
+          // xoa phong choi
+          listRoom.delete(roomID);
+          // emit thông tin winner ra màn hình cả 2 người chơi.
+          return io.in(roomID).emit("show_result", winner[0], winnerChar);
+        }
+      }
+    });
+
+    socket.on("ask_for_draw", roomID => {});
 
     socket.on("disconnect", () => {
       // console.log("disconnect");
