@@ -48,7 +48,7 @@
     ]
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.3",
+    "babel-eslint": "^10.0.2",
     "eslint": "^6.4.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.3.0",
@@ -74,5 +74,8 @@
       "pre-commit": "lint-staged"
     }
   },
-  "proxy": "http://localhost:5000"
+  "engines": {
+    "node": "10.16.0"
+  },
+  "homepage": "https://minhhieu76qng.github.io/1612199-web-midterm"
 }

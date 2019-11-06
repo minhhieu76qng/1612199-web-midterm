@@ -5,7 +5,7 @@ const cors = require("cors");
 
 // config
 app.use(cors());
-require("./configs/config")(app);
+// require("./configs/config")(app);
 require("./configs/mongoose");
 require("./configs/passport");
 
